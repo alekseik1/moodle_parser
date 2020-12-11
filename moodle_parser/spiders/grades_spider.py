@@ -1,34 +1,14 @@
-import os
-import scrapy
-from dotenv import load_dotenv
 from scrapy.http import Response
 
 from moodle_parser.items import Task
-
-load_dotenv()
-
-
-def authentication_failed(response, self):
-    return response.css('span.error::text').get() is not None
+from moodle_parser.spiders.common import AuthBaseSpider
 
 
-class GradesSpider(scrapy.Spider):
+class GradesSpider(AuthBaseSpider):
     name = 'grades_spider'
-    allowed_domains = ['moodle.phystech.edu']
-    start_urls = ['http://moodle.phystech.edu/login/index.php']
 
-    def parse(self, response, **kwargs):
-        return scrapy.FormRequest.from_response(
-            response,
-            formdata={
-                'username': os.environ.get('MOODLE_LOGIN'),
-                'password': os.environ.get('MOODLE_PASSWORD')},
-            callback=self.after_login)
-
-    def after_login(self, response):
-        if authentication_failed(response, self):
-            self.logger.error("Login failed")
-            return
+    def after_login(self, response, **kwargs):
+        super().after_login(response, **kwargs)
         # Теперь идем за курсами
         yield response.follow('/grade/report/overview/index.php', callback=self.parse_first_course)
 

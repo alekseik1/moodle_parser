@@ -4,7 +4,8 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from scrapy.item import Field
+from scrapy import Field
+from itemloaders.processors import TakeFirst, MapCompose
 
 
 class Task(scrapy.Item):
@@ -14,3 +15,8 @@ class Task(scrapy.Item):
     task_id = Field()
     grade = Field()
     max_grade = Field()
+
+
+class Attempt(scrapy.Item):
+    mark = Field(output_processor=TakeFirst())
+    details_link = Field(output_processor=TakeFirst())
