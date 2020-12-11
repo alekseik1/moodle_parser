@@ -4,12 +4,13 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from dataclasses import dataclass
+from scrapy.item import Field
 
 
-@dataclass
-class Task:
-    name: str
-    url: str
-    grade: float
-    max_grade: str
+class Task(scrapy.Item):
+    name = Field()
+    url = Field()
+    task_type = Field()
+    task_id = Field()
+    grade = Field()
+    max_grade = Field()

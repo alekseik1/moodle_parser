@@ -62,9 +62,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'moodle_parser.pipelines.MoodleParserPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'moodle_parser.pipelines.SetTaskType': 50,
+    'moodle_parser.pipelines.DropAssignTasks': 51,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
